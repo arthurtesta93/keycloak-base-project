@@ -1,0 +1,54 @@
+version: '3.5'
+networks:
+  constrsw-2023-2:
+services:
+  # Keycloak
+  keycloak:
+    container_name: keycloak
+    build:
+      context: ./resources/keycloak/.
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=a12345678
+      - KEYCLOAK_FRONTEND_URL=http://localhost:8080
+      - KC_HEALTH_ENABLED=true
+    restart: always
+    volumes:
+      - ./resources/keycloak:/opt/jboss/keycloak/standalone/data
+      - ./resources/keycloak:/opt/keycloak/data/import
+    networks:
+      - constrsw-2023-2
+    command: start-dev --import-realm
+    healthcheck:
+          test: [ "CMD-SHELL", "curl -f http://localhost:8080/health || exit 1" ]
+          start_period: 120s
+          interval: 10s
+          timeout: 10s
+          retries: 5
+  # Auth API grupoum
+#  grupoum:
+#    container_name: grupoum
+#    build:
+#      context: ./grupoum/.
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
+#      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
+#      - KEYCLOAK_REALM=${KEYCLOAK_REALM}
+#      - KEYCLOAK_REALM_URL=${KEYCLOAK_REALM_URL}
+#    networks:
+#      - constrsw-2023-2
+#    depends_on:
+#      keycloak:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD-SHELL", "curl -f http://localhost:8080/ || exit 1"]
+#      start_period: 20s
+#      interval: 10s
+#      timeout: 10s
+#      retries: 5
