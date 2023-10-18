@@ -92,13 +92,14 @@ public class UserService {
         ).getBody();
     }
 
-    public String updateUser(String userId, UserDataRequest user) {
+    public String updateUser(String userId, UserDataRequest userDataRequest) {
 
         UserDataRequest requestBody = UserDataRequest.builder()
-                .username(user.getUsername())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
+                .username(userDataRequest.getUsername())
+                .firstName(userDataRequest.getFirstName())
+                .lastName(userDataRequest.getLastName())
+                .email(userDataRequest.getEmail())
+                .enabled(userDataRequest.getEnabled())
                 .build();
 
         String authToken = AuthToken.retrieveToken();
@@ -134,10 +135,13 @@ public class UserService {
         JsonObject requestBody = new JsonObject();
         requestBody.addProperty("enabled", false);
 
+        String jsonRequest = requestBody.toString();
+
+        System.out.println(requestBody);
         headers.setBearerAuth(authToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> request = new HttpEntity<>(headers);
+        HttpEntity<String> request = new HttpEntity<>(jsonRequest, headers);
 
         return restTemplate.exchange(
                 baseUrl + "/admin/realms/construcao-sw/users/" + userId,

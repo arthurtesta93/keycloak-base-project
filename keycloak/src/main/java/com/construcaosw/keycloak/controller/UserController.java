@@ -4,6 +4,7 @@ package com.construcaosw.keycloak.controller;
 import com.construcaosw.keycloak.dto.UserDataRequest;
 import com.construcaosw.keycloak.dto.UserDataResponse;
 import com.construcaosw.keycloak.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "API de Usuário", description = "Criar, editar e desabilitar usuários")
+
 public class UserController {
 
     public final UserService userService;
@@ -38,7 +41,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userId, user));
     }
 
-    @PutMapping("/{userId}/delete")
+    @DeleteMapping("/{userId}/delete")
     public ResponseEntity<String> deleteUser(@PathVariable String userId){
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
