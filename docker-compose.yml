@@ -29,10 +29,10 @@ services:
           timeout: 10s
           retries: 5
   # Auth API grupoum
-#  grupoum:
-#    container_name: grupoum
+#  keycloak:
+#    container_name: keycloak
 #    build:
-#      context: ./grupoum/.
+#      context: ./keycloak/.
 #      dockerfile: Dockerfile
 #    ports:
 #      - "8080:8080"
